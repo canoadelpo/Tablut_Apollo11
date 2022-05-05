@@ -1,6 +1,3 @@
-<!-- Le istruzioni su come usare ANT per eseguire il progetto, sono incluse nel file
-     di README, nella home del progetto -->
-
 <project name="Tablut" default="compile">
 
     <target name="clean">
@@ -13,6 +10,7 @@
             <classpath>
                 <pathelement path="lib/gson-2.2.2.jar" />
                 <pathelement path="lib/commons-cli-1.4.jar" />
+            	<pathelement path="lib/aima-core.jar" />
             </classpath>
         </javac>
         <copy todir="build">
@@ -25,7 +23,7 @@
             <classpath>
                 <pathelement location="lib/gson-2.2.2.jar"/>
                 <pathelement location="lib/commons-cli-1.4.jar"/>
-		<pathelement path="lib/aima-core.jar" />
+            	<pathelement location="lib/aima-core.jar" />
                 <pathelement location="build"/>
             </classpath>
         </java>
@@ -47,6 +45,7 @@
         <java classname="it.unibo.ai.didattica.competition.tablut.server.Server" fork="true">
             <arg value="-g"/>
             <classpath>
+            	<pathelement location="lib/aima-core.jar" />
                 <pathelement location="lib/gson-2.2.2.jar"/>
                 <pathelement location="lib/commons-cli-1.4.jar"/>
                 <pathelement location="build"/>
@@ -105,6 +104,7 @@
 	<target name="Apollo11Client">
 			        <java classname="it.unibo.ai.didattica.competition.tablut.apollo11.TablutApollo11Client" fork="true">
 			            <classpath>
+			            	<pathelement location="lib/aima-core.jar" />
 			                <pathelement location="lib/gson-2.2.2.jar"/>
 			                <pathelement location="build"/>
 			            </classpath>
@@ -114,6 +114,7 @@
 		<target name="WhiteMoonClient">
 		        <java classname="it.unibo.ai.didattica.competition.tablut.apollo11.TablutWhiteMoon" fork="true">
 		            <classpath>
+		            	<pathelement location="lib/aima-core.jar" />
 		                <pathelement location="lib/gson-2.2.2.jar"/>
 		                <pathelement location="build"/>
 		            </classpath>
@@ -123,6 +124,7 @@
 		<target name="BlackHoleClient">
 			        <java classname="it.unibo.ai.didattica.competition.tablut.apollo11.TablutBlackHole" fork="true">
 			            <classpath>
+			            	<pathelement location="lib/aima-core.jar" />
 			                <pathelement location="lib/gson-2.2.2.jar"/>
 			                <pathelement location="build"/>
 			            </classpath>
