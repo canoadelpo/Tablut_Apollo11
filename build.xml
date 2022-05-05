@@ -101,6 +101,33 @@
         </java>
     </target>
 	
+	<target name="Apollo11Client">
+			        <java classname="it.unibo.ai.didattica.competition.tablut.apollo11.TablutApollo11Client" fork="true">
+			            <classpath>
+			                <pathelement location="lib/gson-2.2.2.jar"/>
+			                <pathelement location="build"/>
+			            </classpath>
+			        </java>
+			 </target>
+		
+		<target name="WhiteMoonClient">
+		        <java classname="it.unibo.ai.didattica.competition.tablut.apollo11.TablutWhiteMoon" fork="true">
+		            <classpath>
+		                <pathelement location="lib/gson-2.2.2.jar"/>
+		                <pathelement location="build"/>
+		            </classpath>
+		        </java>
+		 </target>
+		
+		<target name="BlackHoleClient">
+			        <java classname="it.unibo.ai.didattica.competition.tablut.apollo11.TablutBlackHole" fork="true">
+			            <classpath>
+			                <pathelement location="lib/gson-2.2.2.jar"/>
+			                <pathelement location="build"/>
+			            </classpath>
+			        </java>
+		</target>
+	
 
     <target name="tester">
         <java classname="it.unibo.ai.didattica.competition.tablut.tester.Tester" fork="true">
