@@ -25,6 +25,7 @@
             <classpath>
                 <pathelement location="lib/gson-2.2.2.jar"/>
                 <pathelement location="lib/commons-cli-1.4.jar"/>
+		<pathelement path="lib/aima-core.jar" />
                 <pathelement location="build"/>
             </classpath>
         </java>
