@@ -60,7 +60,7 @@ public class BlackHoleHeuristics extends Heuristics{
 			}
 			openWays=openWays/8;
 		}
-		//divento più aggressivo
+		//posso essere più aggressivo
 		if (this.kingIsprotected()) {
 			openWays=openWays*0.5;
 			bonusEatWhite=1.5;
@@ -102,7 +102,7 @@ public class BlackHoleHeuristics extends Heuristics{
 	}
 	
 	/**
-	 * This method returns the king position in the board represented with an array of int
+	 * Questo metodo restituisce la posizione del Re (King) come un array di int
 	 * 
 	 * @return the position of the king in the board
 	 */
@@ -122,7 +122,7 @@ public class BlackHoleHeuristics extends Heuristics{
 		return kingPosition;
 	}
 	/**
-	 * This method returns int that represents how many pawn are necessaries to eat the king
+	 * Questo metodo resituisce il numero di pedoni neri necessari per mangiare il Re (4 o 3 o 2)
 	 * 
 	 * @return how many pawn are necessaries to eat the king
 	 */
@@ -176,7 +176,7 @@ public class BlackHoleHeuristics extends Heuristics{
 	
 
 	/**
-	 * This method returns a boolean that express if the king is in one of the squares near the throne or not
+	 * Questo metodo restituisce un boolean se il re è vicino al trono o meno (quindi può essere mangiato da 3 pedine nere)
 	 * 
 	 * @return true if king is in the squares near the throne, false if not
 	 * 
@@ -217,7 +217,7 @@ public class BlackHoleHeuristics extends Heuristics{
 				
 	}
 	
-	//vero se la posizione indicata e raggiongibile da una pedina nera (non scavalca pedine bianche)
+	//vero se la posizione indicata e raggiungibile da una pedina nera (non scavalca pedine bianche)
 	public boolean positionReachable(int x, int y) {
 		//guardo a destra
 		for (int i=x; i<this.board.length; i++)
@@ -240,7 +240,7 @@ public class BlackHoleHeuristics extends Heuristics{
 					return true;
 			else
 					return false;
-		//gardo sopra
+		//guardo sopra
 		for (int i=y; i>=0; i--)
 			if (!this.board[x][i].equals(State.Pawn.EMPTY))
 				if ( this.board[x][i].equals(State.Pawn.BLACK))
@@ -252,7 +252,7 @@ public class BlackHoleHeuristics extends Heuristics{
 
 
 	public boolean kingIsNearThrone(){
-		//structure that represent the squares near the throne
+		//struttura bidimensionale che rappresenta le celle vicine al trono
 		final int [][] nearThrone= {	
 				
 										{3, 4},
@@ -268,10 +268,10 @@ public class BlackHoleHeuristics extends Heuristics{
 	}
 
 	 /*
-	 * This method returns a boolean that express if a specific square is inside one of the citadel
+	 * Questo metodo serve per identificare se una cella sia o meno dentro ad una citadel (quindi mossa non consentita)
 	 */
 	public boolean isCitadel(int x, int y) {
-		//structure that represent citadels squares
+		//struttura bidimensionale che rappresenta le citadels
 		final int[][] citadels= {
 				
 									{0, 4}, {0, 5}, {0, 6}, 
@@ -295,7 +295,7 @@ public class BlackHoleHeuristics extends Heuristics{
 	
 	
 	/**
-	 * This method returns a boolean that express if there are or not open ways for the kind to escape from the board
+	 * Questo metodo restituisce un boolean che indica se ci sono via di fuga o meno per Re per vincere
 	 * 
 	 * @return true if king has an open way to escape from the board, false if not
 	 * 
@@ -330,32 +330,9 @@ public class BlackHoleHeuristics extends Heuristics{
 		return true;
 	}
 		
-	/*
-	public boolean isFreeRow(int r) {
-		State.Pawn board[][]=this.state.getBoard();
-		for (int i=0; i<board[r].length; i++) {
-			if (!(board[r][i].equals(State.Pawn.EMPTY)))
-				return false;
-						
-		}
-		return true;
-	}
-	
-	
-	public boolean isFreeColumn(int c) {
-		State.Pawn board[][]=this.state.getBoard();
-		for (int i=0; i<board[c].length; i++) {
-			if (!(board[i][c].equals(State.Pawn.EMPTY)))
-				return false;
-						
-		}
-		return true;
-	}
-	*/
-	
 
 	/**
-	 * This method counts how many possible open ways there are not covered by the rhombus strategy
+	 * Conta quante via ci siano non ancora occupato della tattica a rombo
 	 * 
 	 * @return how many open possible ways there are, not closed by the rhombus strategy by black
 	 * 
@@ -387,7 +364,7 @@ public class BlackHoleHeuristics extends Heuristics{
 	}
 	
 	/**
-	 * This method tell us if a pawn is in danger to be captured
+	 * Questo metodo restituisce se una pedina sia in pericolo di cattura o meno
 	 * 
 	 * @return true if a specific pawn is in danger to be captured from any position
 	 * @param the position of the pawn that can be potentially captured by others enemy pawns
@@ -403,7 +380,7 @@ public class BlackHoleHeuristics extends Heuristics{
 		int rowAbove=position[0]-1;
 		int rowBelow=position[0]-1;
 				
-		//control in the column on the right
+		//controllo colonna a destra
 		if(colOnTheRight>=0)
 		{
 			for (int i=0; i<board.length && !board[position[0]][colOnTheRight].equals(State.Pawn.EMPTY); i++) {
@@ -437,7 +414,7 @@ public class BlackHoleHeuristics extends Heuristics{
 			}
 		}
 		
-		//control in the column on the left
+		//controllo la colonna a sinistra
 		if(colOnTheLeft>=0)
 		{
 			for (int i=0; i<board.length && !board[position[0]][colOnTheLeft].equals(State.Pawn.EMPTY); i++) {
@@ -471,7 +448,7 @@ public class BlackHoleHeuristics extends Heuristics{
 			}
 		}
 		
-		//control in the row on the top
+		//controlla la riga sopra
 		if(rowAbove>=0)
 		{
 			for (int i=0; i<board[rowAbove].length && !board[position[0]][rowAbove].equals(State.Pawn.EMPTY); i++) {
@@ -504,7 +481,7 @@ public class BlackHoleHeuristics extends Heuristics{
 			}
 		}
 		
-		//control in the row below
+		//controllo la riga sotto
 		if(rowBelow>=0)
 		{
 			for (int i=0; i<board[rowBelow].length && !board[position[0]][rowBelow].equals(State.Pawn.EMPTY); i++) {
