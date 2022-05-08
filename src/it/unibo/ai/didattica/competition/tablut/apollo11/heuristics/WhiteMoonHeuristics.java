@@ -16,13 +16,12 @@ public class WhiteMoonHeuristics extends Heuristics{
     private final String BLACK_SURROUND_KING = "blackSurroundKing";
     private final String PROTECTION_KING = "protectionKing";
     private final String TERZA_FILA = "terzafila";
-    //private final String NET = "net";
 
 
-    //Threshold used to decide whether to use best positions configuration
+    //Limire per decidere la configurazione per le migliori posizioni delle pedine bianche
     private final static int THRESHOLD_BEST = 2;
 
-    //Matrix of favourite white positions in the initial stages of the game
+    //Matrice delle migliori posizioni delle pedine bianche all'inizio del gioco
     private final static int[][] bestPositions = {
             {2,3},  {3,5},
             {5,3},  {6,5}
@@ -34,16 +33,15 @@ public class WhiteMoonHeuristics extends Heuristics{
     private Map<String,Double> weights;
     private String[] keys;
 
-    //Flag to enable console print
+    //Flag per abilitare la print su console
     private boolean flag = false;
 
     public WhiteMoonHeuristics(State state) {
 
         super(state);
 
-        //Initializing weights
+       
         weights = new HashMap<String,Double>();
-        //Positions which are the best moves at the beginning of the game
         
         weights.put(BEST_POSITIONS, 1.0);
         weights.put(BLACK_EATEN, 37.3);
@@ -53,7 +51,7 @@ public class WhiteMoonHeuristics extends Heuristics{
         weights.put(PROTECTION_KING, 15.0);
         weights.put(TERZA_FILA, 2.0);
         
-        //Extraction of keys
+        //estraggo chiavi da weights
         keys = new String[weights.size()];
         keys = weights.keySet().toArray(new String[0]);
 
@@ -63,23 +61,13 @@ public class WhiteMoonHeuristics extends Heuristics{
     public double evaluateState() {
 
         double utilityValue = 0;
-        //Atomic functions to combine to get utility value through the weighted sum
+        //Funzioni per ottenere il 'utility value' attraverso la somma pesata
         double bestPositions = (double) getNumberOnBestPositions() / NUM_BEST_POSITION;
         double numberOfWhiteAlive =  (double)(state.getNumberOf(State.Pawn.WHITE)) / GameAshtonTablut.NUM_WHITE;
         double numberOfBlackEaten = (double)(GameAshtonTablut.NUM_BLACK - state.getNumberOf(State.Pawn.BLACK)) / GameAshtonTablut.NUM_BLACK;
         double blackSurroundKing = (double)(getNumEatenPositions(state) - countNearPawns(state, kingPosition(state),State.Turn.BLACK.toString())) / getNumEatenPositions(state);
         double protectionKing = protectionKing();
         double terzafila= terzaFila();
-        /*
-        double prediction = 0;
-        
-        try {
-			prediction = expectoPraedictionem(state);
-		} catch (IOException | InvalidKerasConfigurationException | UnsupportedKerasConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		*/
 
         int numberWinWays = countWinWays(state);
         double numberOfWinEscapesKing = numberWinWays>1 ? (double)countWinWays(state)/4 : 0.0;
@@ -99,7 +87,6 @@ public class WhiteMoonHeuristics extends Heuristics{
         values.put(BLACK_SURROUND_KING,blackSurroundKing);
         values.put(PROTECTION_KING,protectionKing);
         values.put(TERZA_FILA, terzafila);
-        //values.put(NET,prediction);
 
         for (int i=0; i < weights.size(); i++){
             utilityValue += weights.get(keys[i]) * values.get(keys[i]);
@@ -108,17 +95,6 @@ public class WhiteMoonHeuristics extends Heuristics{
                         " = " + weights.get(keys[i]) * values.get(keys[i]));
             }
         }
-        
-        
-        
-        /*
-        try {
-			System.out.println("Stato:\n "+state.boardString()+"\nValore: "+expectoPraedictionem(state)+"\n");
-		} catch (IOException | InvalidKerasConfigurationException | UnsupportedKerasConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
 
         return utilityValue;
     }
@@ -130,8 +106,7 @@ public class WhiteMoonHeuristics extends Heuristics{
         //controllo per ognuna delle 4 linee ce ne è almeno 1 completamente libera 
         int num=0;
    
-        //riga a3 i3
-
+        //a3 i3
         for (int j=0; j<9; j++) {
         	if(state.getPawn(2,j).equalsPawn(State.Pawn.WHITE.toString())
         		|| state.getPawn(2,j).equalsPawn(State.Pawn.BLACK.toString()
@@ -156,7 +131,7 @@ public class WhiteMoonHeuristics extends Heuristics{
         				occupate=true;
         			}
         		}else if (kingPos[0]<3) {
-        			//il re sta sopra
+        			//re sta sopra
         			int []p= {kingPos[0]+i,kingPos[1]};
         			if(checkOccupiedPosition(state,p)) {
         				occupate=true;
@@ -178,7 +153,7 @@ public class WhiteMoonHeuristics extends Heuristics{
         	
         }
         num=0;
-        //riga c1 c9
+        //c1 c9
         for (int j=0; j<9; j++) {
         		if(state.getPawn(j,2).equalsPawn(State.Pawn.WHITE.toString())
         		|| state.getPawn(j,2).equalsPawn(State.Pawn.BLACK.toString()
@@ -200,7 +175,7 @@ public class WhiteMoonHeuristics extends Heuristics{
         				occupate=true;
         			}
         		}else if (kingPos[1]<3) {
-        			//il re sta a sinistra
+        			//re sta a sinistra
         			int []p= {kingPos[0],kingPos[1]+i};
         			if(checkOccupiedPosition(state,p)) {
         				occupate=true;
@@ -245,7 +220,7 @@ public class WhiteMoonHeuristics extends Heuristics{
         				occupate=true;
         			}
         		}else if (kingPos[1]<7) {
-        			//il re sta a sinistra
+        			//re sta a sinistra
         			int []p= {kingPos[0],kingPos[1]+i};
         			if(checkOccupiedPosition(state,p)) {
         				occupate=true;
@@ -267,7 +242,7 @@ public class WhiteMoonHeuristics extends Heuristics{
         }
         
         num=0;
-        //riga a7 i7
+        //a7 i7
         for (int j=0; j<9; j++) {
         	if(state.getPawn(6,j).equalsPawn(State.Pawn.WHITE.toString())
         		|| state.getPawn(6,j).equalsPawn(State.Pawn.BLACK.toString()
@@ -290,7 +265,7 @@ public class WhiteMoonHeuristics extends Heuristics{
         				occupate=true;
         			}
         		}else if (kingPos[0]<7) {
-        			//il re sta sopra
+        			//re sta sopra
         			int []p= {kingPos[0]+i,kingPos[1]};
         			if(checkOccupiedPosition(state,p)) {
         				occupate=true;
@@ -352,48 +327,48 @@ public class WhiteMoonHeuristics extends Heuristics{
    
     private double protectionKing(){
 
-        //Values whether there is only a white pawn near to the king
+        //Valori quando c'è solo una pedina bianca vicino al re
         final double VAL_NEAR = 0.6;
         final double VAL_TOT = 1.0;
 
         double result = 0.0;
 
         int[] kingPos = kingPosition(state);
-        //Pawns near to the king
+        //pedine vicino al re
         ArrayList<int[]> pawnsPositions = (ArrayList<int[]>) positionNearPawns(state,kingPos,State.Pawn.BLACK.toString());
 
-        //There is a black pawn that threatens the king and 2 pawns are enough to eat the king
+        //C'è una pedina nera che minaccia il re e 2 pedine sono abbastanza per mangiarlo
         if (pawnsPositions.size() == 1 && getNumEatenPositions(state) == 2){
             int[] enemyPos = pawnsPositions.get(0);
-            //Used to store other position from where king could be eaten
+            //Usato per mantenere altre posizioni da dove il re potrebbe essere mangiato
             int[] targetPosition = new int[2];
-            //Enemy right to the king
+            //Nemico alla destra del re
             if(enemyPos[0] == kingPos[0] && enemyPos[1] == kingPos[1] + 1){
-                //Left to the king there is a white pawn and king is protected
+                //alla sinistra del re c'è una pedina bianca e il re è protetto
                 targetPosition[0] = kingPos[0];
                 targetPosition[1] = kingPos[1] - 1;
                 if (state.getPawn(targetPosition[0],targetPosition[1]).equalsPawn(State.Pawn.WHITE.toString())){
                     result += VAL_NEAR;
                 }
-            //Enemy left to the king
+            //Nemico alla sinistra del re
             }else if(enemyPos[0] == kingPos[0] && enemyPos[1] == kingPos[1] -1){
-                //Right to the king there is a white pawn and king is protected
+                //alla destra del re c'è una pedina bianca e il re è protetto
                 targetPosition[0] = kingPos[0];
                 targetPosition[1] = kingPos[1] + 1;
                 if(state.getPawn(targetPosition[0],targetPosition[1]).equalsPawn(State.Pawn.WHITE.toString())){
                     result += VAL_NEAR;
                 }
-            //Enemy up to the king
+            //Nemico sopra il re
             }else if(enemyPos[1] == kingPos[1] && enemyPos[0] == kingPos[0] - 1){
-                //Down to the king there is a white pawn and king is protected
+                //Sotto il re c'è una pedina bianca e il re è protetto
                 targetPosition[0] = kingPos[0] + 1;
                 targetPosition[1] = kingPos[1];
                 if(state.getPawn(targetPosition[0], targetPosition[1]).equalsPawn(State.Pawn.WHITE.toString())){
                     result += VAL_NEAR;
                 }
-            //Enemy down to the king
+            //Nemico sotto il re
             }else{
-                //Up there is a white pawn and king is protected
+                //Sopra il re c'è una pedina bianca e il re è protetto
                 targetPosition[0] = kingPos[0] - 1;
                 targetPosition[1] = kingPos[1];
                 if(state.getPawn(targetPosition[0], targetPosition[1]).equalsPawn(State.Pawn.WHITE.toString())){
@@ -401,11 +376,11 @@ public class WhiteMoonHeuristics extends Heuristics{
                 }
             }
 
-            //Considering whites to use as barriers for the target pawn
+            //Considerando i bianchi da usare come barriere per il pedone bersaglio
             double otherPoints = VAL_TOT - VAL_NEAR;
             double contributionPerN = 0.0;
 
-            //Whether it is better to keep free the position
+            //Se è meglio mantenere libera la posizione
             if (targetPosition[0] == 0 || targetPosition[0] == 8 || targetPosition[1] == 0 || targetPosition[1] == 8){
                 if(state.getPawn(targetPosition[0],targetPosition[1]).equalsPawn(State.Pawn.EMPTY.toString())){
                     result = 1.0;
@@ -413,7 +388,8 @@ public class WhiteMoonHeuristics extends Heuristics{
                     result = 0.0;
                 }
             }else{
-                //Considering a reduced number of neighbours whether target is near to citadels or throne
+                //Considerando un numero di pedine vicine ridotto se il bersaglio è vicino alla citadel o al trono
+		 
                 if (targetPosition[0] == 4 && targetPosition[1] == 2 || targetPosition[0] == 4 && targetPosition[1] == 6
                         || targetPosition[0] == 2 && targetPosition[1] == 4 || targetPosition[0] == 6 && targetPosition[1] == 4
                         || targetPosition[0] == 3 && targetPosition[1] == 4 || targetPosition[0] == 5 && targetPosition[1] == 4
@@ -568,8 +544,7 @@ public class WhiteMoonHeuristics extends Heuristics{
                 // safe col not safe row
                 col = countFreeColumn(state, kingPosition);
             }
-            //System.out.println("ROW:"+row);
-            //System.out.println("COL:"+col);
+            
             return (col + row);
         }
 
@@ -584,7 +559,7 @@ public class WhiteMoonHeuristics extends Heuristics{
 	        int freeWays=0;
 	        int countRight=0;
 	        int countLeft=0;
-	        //going right
+	        //dx
 	        for(int i = column+1; i<=8; i++) {
 	            currentPosition[0]=row;
 	            currentPosition[1]=i;
@@ -594,7 +569,7 @@ public class WhiteMoonHeuristics extends Heuristics{
 	        }
 	        if(countRight==0)
 	            freeWays++;
-	        //going left
+	        //sx
 	        for(int i=column-1;i>=0;i--) {
 	            currentPosition[0]=row;
 	            currentPosition[1]=i;
@@ -610,14 +585,14 @@ public class WhiteMoonHeuristics extends Heuristics{
 
 	    
 	    public int countFreeColumn(State state,int[] position){
-	        //lock column
+	        //blocco colonna
 	        int row=position[0];
 	        int column=position[1];
 	        int[] currentPosition = new int[2];
 	        int freeWays=0;
 	        int countUp=0;
 	        int countDown=0;
-	        //going down
+	        //giu
 	        for(int i=row+1;i<=8;i++) {
 	            currentPosition[0]=i;
 	            currentPosition[1]=column;
@@ -627,7 +602,7 @@ public class WhiteMoonHeuristics extends Heuristics{
 	        }
 	        if(countDown==0)
 	            freeWays++;
-	        //going up
+	        //su
 	        for(int i=row-1;i>=0;i--) {
 	            currentPosition[0]=i;
 	            currentPosition[1]=column;
