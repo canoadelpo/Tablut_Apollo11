@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ $# -ne ]] ; then
+if [[ $# -ne 3 ]] ; then
   echo "Servono tutti gli argomenti"
   echo "Inserire WHITE o BLACK come primo parametro"
   echo "Il timeout in secondi come secondo parametro"
